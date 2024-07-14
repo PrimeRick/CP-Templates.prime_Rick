@@ -1,6 +1,4 @@
 // template code
-#include <bits/stdc++.h>
-using namespace std;
 #define ll long long
 
 class SGTree{
@@ -53,29 +51,3 @@ class SGTree{
             seg[ind]=min(seg[(ind*2)+1], seg[(ind*2)+2]);
         }
 };
-
-void solve(){
-    ll n; cin>>n;
-    vector<ll> arr(n);
-    for(ll i=0; i<n; i++) cin>>arr[i];
-    SGTree sg(n);
-    sg.build(0,0,n-1,arr);
-    ll q; cin>>q;
-    while(q--){
-        ll type,l,r; cin>>type>>l>>r;  
-        // type --> 1     update
-        // type --> 2     query from [l,r]
-        if(type==1){
-            l--;
-            sg.update(0, 0, n-1, l, r);
-        }
-        else{
-            l--, r--;
-            cout<<sg.query(0, 0, n-1, l, r)<<endl;
-        }
-    }
-}
-
-signed main(){
-    solve();
-}
