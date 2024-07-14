@@ -4,8 +4,8 @@ using namespace std;
 
 class SGTree{
     // queries of min and updates
-    vector<int> seg;
     public:
+        vector<int> seg;
         SGTree(int n){
             seg.resize((4*n)+1);
         }
