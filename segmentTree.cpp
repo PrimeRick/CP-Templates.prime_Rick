@@ -2,7 +2,6 @@
 #include <bits/stdc++.h>
 using namespace std;
 #define ll long long
-#define vll vector<ll>
 
 class SGTree{
     // queries of min and updates
@@ -11,7 +10,7 @@ class SGTree{
         SGTree(ll n){
             seg.resize((4*n)+1);
         }
-        void build(ll ind, ll low, ll high, vll &arr){
+        void build(ll ind, ll low, ll high, vector<ll> &arr){
             if(low==high){
                 seg[ind]=arr[low];
                 return;
@@ -56,7 +55,7 @@ class SGTree{
 
 void solve(){
     ll n; cin>>n;
-    vll arr(n);
+    vector<ll> arr(n);
     for(ll i=0; i<n; i++) cin>>arr[i];
     SGTree sg(n);
     sg.build(0,0,n-1,arr);
