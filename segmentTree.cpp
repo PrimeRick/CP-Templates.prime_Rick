@@ -60,7 +60,9 @@ void solve(){
     sg.build(0,0,n-1,arr);
     int q; cin>>q;
     while(q--){
-        int type,l,r; cin>>type>>l>>r;
+        int type,l,r; cin>>type>>l>>r;  
+        // type --> 1     update
+        // type --> 2     query from [l,r]
         if(type==1){
             l--;
             sg.update(0, 0, n-1, l, r);
