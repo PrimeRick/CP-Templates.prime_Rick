@@ -16,9 +16,10 @@ class SGTree{
                 return;
             }
             ll mid=(low+high)/2;
-            build((2*ind)+1, low, mid, arr);
-            build((2*ind)+2, mid+1, high, arr);
-            seg[ind]=min(seg[(ind*2)+1], seg[(ind*2)+2]);
+            ll p1=(2*ind)+1, p2=(2*ind)+2;
+            build(p1, low, mid, arr);
+            build(p2, mid+1, high, arr);
+            seg[ind]=min(seg[p1], seg[p2]);
         }
 
         ll query(ll ind, ll low, ll high, ll l, ll r){
