@@ -1,26 +1,27 @@
 // template code
 #include <bits/stdc++.h>
 using namespace std;
+#define ll long long
 
 class SGTree{
     // queries of min and updates
     public:
-        vector<int> seg;
-        SGTree(int n){
+        vector<ll> seg;
+        SGTree(ll n){
             seg.resize((4*n)+1);
         }
-        void build(int ind, int low, int high, int arr[]){
+        void build(ll ind, ll low, ll high, ll arr[]){
             if(low==high){
                 seg[ind]=arr[low];
                 return;
             }
-            int mid=(low+high)/2;
+            ll mid=(low+high)/2;
             build((2*ind)+1, low, mid, arr);
             build((2*ind)+2, mid+1, high, arr);
             seg[ind]=min(seg[(ind*2)+1], seg[(ind*2)+2]);
         }
 
-        int query(int ind, int low, int high, int l, int r){
+        ll query(ll ind, ll low, ll high, ll l, ll r){
             // no overlap
             if(r<low || l>high){
                 return INT_MAX;
@@ -30,18 +31,18 @@ class SGTree{
                 return seg[ind];
             }
             // partial overlap
-            int mid=(low+high)>>1;
-            int left=query(2*ind+1, low, mid, l, r);
-            int right=query(2*ind+2, mid+1, high, l, r);
+            ll mid=(low+high)>>1;
+            ll left=query(2*ind+1, low, mid, l, r);
+            ll right=query(2*ind+2, mid+1, high, l, r);
             return min(left, right);
         }
 
-        void update(int ind, int low, int high, int i, int val){
+        void update(ll ind, ll low, ll high, ll i, ll val){
             if(low==high){
                 seg[ind]=val;
                 return;
             }
-            int mid=(low+high)>>1;
+            ll mid=(low+high)>>1;
             if(i<=mid){
                 update(2*ind+1, low, mid, i, val);
             }
@@ -53,14 +54,14 @@ class SGTree{
 };
 
 void solve(){
-    int n; cin>>n;
-    int arr[n];
-    for(int i=0; i<n; i++) cin>>arr[i];
+    ll n; cin>>n;
+    ll arr[n];
+    for(ll i=0; i<n; i++) cin>>arr[i];
     SGTree sg(n);
     sg.build(0,0,n-1,arr);
-    int q; cin>>q;
+    ll q; cin>>q;
     while(q--){
-        int type,l,r; cin>>type>>l>>r;  
+        ll type,l,r; cin>>type>>l>>r;  
         // type --> 1     update
         // type --> 2     query from [l,r]
         if(type==1){
@@ -74,6 +75,6 @@ void solve(){
     }
 }
 
-int main(){
+signed main(){
     solve();
 }
