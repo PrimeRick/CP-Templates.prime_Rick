@@ -1,5 +1,4 @@
 // template code
-#define ll long long
 
 class SGTree{
     // queries of min and updates
