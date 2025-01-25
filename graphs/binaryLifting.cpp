@@ -8,15 +8,20 @@ int main(){
     vector<ll> parents(n+1);
     vector<bool> vis(n+1, false);
     vector<ll> level(n+1);
-    function<void(ll)>dfs = [&](ll vertex) -> void{
-        vis[vertex]=true;
-        for(auto child:adj[vertex]){
+    queue<ll> qq;
+    qq.emplace(1);
+    vis[1]=true;
+    while(!qq.empty()){
+        ll curr=qq.front();
+        qq.pop();
+        for(auto child:adj[curr]){
             if(vis[child]) continue;
-            level[child]=level[vertex]+1;
-            dfs(child);
+            parents[child]=curr;
+            vis[child]=true;
+            qq.emplace(child);
+            level[child]=level[curr]+1;
         }
-    };
-    dfs(1);
+    }
     ll LOG=ceil(log2(n));
     vector<vector<ll>>  ancestor(n+1, vector<ll>(LOG+1));
     for(ll i=2; i<=n; i++){
@@ -51,6 +56,23 @@ int main(){
             }
         }
         return ancestor[u][0];
+    };
+    vector<ll> sum_from_root(n+1);
+    vector<ll> a(n);     // vector of values of nodes
+    ll total_sum=accumulate(a.begin(), a.end(), 0LL);
+    fill(vis.begin(), vis.end(), false);
+    auto dfs = [&](ll vertex, auto &&dfs) -> void{
+        vis[vertex]=true;
+        for(auto child:adj[vertex]){
+            if(vis[child]) continue;
+            sum_from_root[child]=sum_from_root[vertex]+a[child];
+            dfs(child, dfs);
+        }
+    };
+    sum_from_root[1]=a[1];
+    dfs(1, dfs);
+    auto sum_path = [&](ll u, ll v) -> ll{
+        return sum_from_root[u]+sum_from_root[v]-(2*sum_from_root[lca(u, v, lca)])+a[lca(u, v, lca)];
     };
     ll q; cin>>q;
     while(q--){
