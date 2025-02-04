@@ -36,14 +36,17 @@ int main(){
     for(ll k=1; k<=LOG; k++){
         for(ll u=1; u<=n; u++){
             ll midAncestor=ancestor[u][k-1];
-            ll kth_ancestor=ancestor[midAncestor][k-1];
-            ancestor[u][k]=kth_ancestor;
-            mx[u][k]=max(mx[u][k-1], mx[midAncestor][k-1]);
-            mn[u][k]=min(mn[u][k-1], mn[midAncestor][k-1]);
+            if(!midAncestor) ancestor[u][k]=0;
+            else{
+                ll kth_ancestor=ancestor[midAncestor][k-1];
+                ancestor[u][k]=kth_ancestor;
+                mx[u][k]=max(mx[u][k-1], mx[midAncestor][k-1]);
+                mn[u][k]=min(mn[u][k-1], mn[midAncestor][k-1]);
+            }
         }
     }
     auto lift = [&](ll u, ll k, auto &&lift) -> ll{
-        for(ll j=LOG+1; j>=0; j--){
+        for(ll j=LOG; j>=0; j--){
             if((1ll<<j)&k){
                 u=ancestor[u][j];
             }
