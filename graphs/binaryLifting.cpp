@@ -5,7 +5,7 @@ using namespace std;
 int main(){
     ll n; cin>>n;
     vector<ll> a(n);     // vector of values of nodes
-    vector<vector<ll>> adj(n);
+    vector<vector<ll>> adj(n+1);
     vector<ll> parents(n+1);
     vector<bool> vis(n+1, false);
     vector<ll> level(n+1);
@@ -36,19 +36,21 @@ int main(){
     for(ll k=1; k<=LOG; k++){
         for(ll u=1; u<=n; u++){
             ll midAncestor=ancestor[u][k-1];
-            if(!midAncestor) ancestor[u][k]=0;
+            if(midAncestor==0){
+                ancestor[u][k]=0;
+            }
             else{
-                ll kth_ancestor=ancestor[midAncestor][k-1];
-                ancestor[u][k]=kth_ancestor;
+                ancestor[u][k]=ancestor[midAncestor][k-1];
                 mx[u][k]=max(mx[u][k-1], mx[midAncestor][k-1]);
                 mn[u][k]=min(mn[u][k-1], mn[midAncestor][k-1]);
             }
         }
     }
     auto lift = [&](ll u, ll k, auto &&lift) -> ll{
-        for(ll j=LOG; j>=0; j--){
+        for(ll j=0; j<=LOG; j++){
             if((1ll<<j)&k){
                 u=ancestor[u][j];
+                if(u==0) break;
             }
         }
         return u;
@@ -56,7 +58,7 @@ int main(){
     auto lca = [&](ll u, ll v, auto &&lca) -> ll{
         if(level[u]<level[v]) swap(u,v);
         // lift node u to the same level as v
-        if(level[u]>level[v]) v=lift(v, level[u]-level[v], lift);
+        if(level[u]>level[v]) u=lift(u, level[u]-level[v], lift);
         if(u==v) return u;
         // lift both u and v until their parents match
         for(int j=LOG; j>=0; j--){
@@ -65,7 +67,7 @@ int main(){
                 v=ancestor[v][j];
             }
         }
-        return ancestor[u][0];
+        return parents[u];
     };
     vector<ll> sum_from_root(n+1);
     ll total_sum=accumulate(a.begin(), a.end(), 0LL);
