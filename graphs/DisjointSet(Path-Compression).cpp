@@ -2,6 +2,7 @@
 using namespace std;
 #define ll long long
 
+// time complexity -> O(⍺(n))
 class UnionFind{
     private: vector<ll> p, rank;
     public:
